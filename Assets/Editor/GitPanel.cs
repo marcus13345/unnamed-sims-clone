@@ -561,7 +561,7 @@ class GitPanel : EditorWindow
 		ExecuteResponse gitPush = executeWithCode("git", "push origin " + currentBranch + "");
 		if (gitPush.exitCode != 0)
 		{
-			dialogue("git push returned exit code " + gitPush.exitCode, gitPush.message + "\n\nThis could be cause by invalid credentials\ntry from the command line");
+			dialogue("git push returned exit code " + gitPush.exitCode, gitPush.message);
 			return;
 		}
 	}
