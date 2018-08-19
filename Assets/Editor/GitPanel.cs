@@ -296,14 +296,8 @@ class GitPanel : EditorWindow
 
 
 		ExecuteResponse executeResponse = new ExecuteResponse();
-		if (executeResponse.exitCode == 0)
-		{
-			output = p.StandardOutput.ReadToEnd();
-		}
-		else
-		{
-			output = p.StandardError.ReadToEnd();
-		}
+		output = p.StandardOutput.ReadToEnd();
+		output += p.StandardError.ReadToEnd();
 		executeResponse.exitCode = p.ExitCode;
 		executeResponse.message = output;
 
