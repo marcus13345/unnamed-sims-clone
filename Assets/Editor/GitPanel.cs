@@ -119,7 +119,7 @@ class GitPanel : EditorWindow
         subHeaderStyle.fontSize = 12;
         monospaced = new GUIStyle(EditorStyles.label);
         monospaced.font = Resources.Load<Font>("Fonts/UbuntuMono-R.ttf");
-        localCommitColor = Color.red;
+        localCommitColor = Color.grey;
         defaultBackgroundColor = Color.white;
         defaultColor = Color.white;
     }
@@ -160,7 +160,7 @@ class GitPanel : EditorWindow
 
             string name = System.IO.Directory.GetCurrentDirectory();
             name = name.Substring(name.LastIndexOf("" + System.IO.Path.DirectorySeparatorChar) + 1);
-            name = Regex.Replace(name, "([A-Z]|[0-9]{1,})", m => " " + m);
+            name = Regex.Replace(name, "-", m => " ");
             name = name.Trim();
             this._name = name;
 
@@ -515,11 +515,11 @@ class GitPanel : EditorWindow
                 {
                     if (commit.local)
                     {
-                        GUI.backgroundColor = Color.green;
+                        GUI.backgroundColor = Color.Lerp(Color.grey, defaultBackgroundColor, 0.5f);
                     }
                     else
                     {
-                        GUI.backgroundColor = Color.cyan;
+                        GUI.backgroundColor = defaultBackgroundColor;
                     }
                     EditorGUILayout.BeginVertical("box");
                     //					EditorGUILayout.BeginHorizontal ();
@@ -559,7 +559,7 @@ class GitPanel : EditorWindow
 								if (GUILayout.Button("resetBusiness()"))
 										business.Clear();
 								GUILayout.EndVertical();
-								
+
 						}
 
 						if (busnessDisplay = EditorGUILayout.Foldout(busnessDisplay, "Debug Business Array"))
