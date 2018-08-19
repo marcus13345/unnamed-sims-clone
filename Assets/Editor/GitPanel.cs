@@ -201,8 +201,8 @@ class GitPanel : EditorWindow
             StringPointer busyLock = new StringPointer("refreshHistory");
 						business.Add(busyLock);
             int commits = 10;
-            string[] syncedCommits = execute("git", "log HEAD~" + commits + "..@{u} -n " + commits + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
-            string[] localCommits = execute("git", "log @{u}.. -n " + commits + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
+            string[] syncedCommits = execute("git", "log @{u} -n " + commits + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
+            string[] localCommits = execute("git", "log @{u}..HEAD -n " + commits + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
 
             history = new Commit[commits];
 						
