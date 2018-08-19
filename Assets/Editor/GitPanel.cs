@@ -35,15 +35,19 @@ class GitPanel : EditorWindow
         }
     }
 
+		private int maxCommits = 10;
+
     private List<StringPointer> business = new List<StringPointer>();
 
     private Vector2 scrollPosition = Vector2.zero;
 
     private Invoke mainThreadInvokeQueue;
 
+		private bool enableDebug = false;
     private bool debugPanel = false;
-
 		private bool busnessDisplay = false;
+
+		private bool advancedOptions = false;
 
     private string commitMessage = "";
 
@@ -200,11 +204,11 @@ class GitPanel : EditorWindow
         {
             StringPointer busyLock = new StringPointer("refreshHistory");
 						business.Add(busyLock);
-            int commits = 10;
-            string[] syncedCommits = execute("git", "log @{u} -n " + commits + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
-            string[] localCommits = execute("git", "log @{u}..HEAD -n " + commits + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
+						int commitCount = Math.Min(Int32.Parse(execute("git", "rev-list --count HEAD").Trim()), maxCommits);
+            string[] syncedCommits = execute("git", "log @{u} -n " + commitCount + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
+            string[] localCommits = execute("git", "log @{u}..HEAD -n " + commitCount + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
 
-            history = new Commit[commits];
+            history = new Commit[commitCount];
 						
 						UnityEngine.Debug.Log(String.Join("\n", syncedCommits));
 						UnityEngine.Debug.Log(String.Join("\n", localCommits));
@@ -502,6 +506,7 @@ class GitPanel : EditorWindow
             }
             else
             {
+            	maxCommits = EditorGUILayout.IntField("History Length", maxCommits);
                 //				int hashWidth = 60;
                 //				float subjectWidth = (EditorGUIUtility.fieldWidth / 2) - hashWidth - 24;
                 //				log (EditorGUIUtility.currentViewWidth);
@@ -531,39 +536,46 @@ class GitPanel : EditorWindow
         }
         #endregion
 
-        if (debugPanel = EditorGUILayout.Foldout(debugPanel, "Debug Event Triggers"))
-        {
-            GUILayout.BeginVertical("box");
-            if (GUILayout.Button("refreshChanges()"))
-                refreshChanges();
-            if (GUILayout.Button("RefreshInformation()"))
-                refreshInformation();
-            if (GUILayout.Button("CreateStyles()"))
-                CreateStyles();
-            if (GUILayout.Button("push()"))
-                push();
-            if (GUILayout.Button("resetBusiness()"))
-                business.Clear();
-            GUILayout.EndVertical();
-        }
-
-        if (busnessDisplay = EditorGUILayout.Foldout(busnessDisplay, "Debug Business Array"))
-        {
-            GUILayout.BeginVertical("box");
-						foreach(StringPointer strp in business) {
-							GUILayout.Label(strp.ToString());
+				if(advancedOptions = EditorGUILayout.Foldout(advancedOptions, "Advanced/Expirimental Options")) {
+					EditorGUI.indentLevel = 1;
+					if (creatingBranch = EditorGUILayout.Foldout(creatingBranch, "Create New Branch"))
+					{
+							newBranchName = EditorGUILayout.TextField("Branch Name", newBranchName);
+							GUILayout.Button("Create New Branch");
+							EditorGUI.indentLevel = 0;
+					}
+					if(enableDebug = GUILayout.Toggle(enableDebug, "Enable Debug Panels")) {
+						if (debugPanel = EditorGUILayout.Foldout(debugPanel, "Debug Event Triggers"))
+						{
+								GUILayout.BeginVertical("box");
+								if (GUILayout.Button("refreshChanges()"))
+										refreshChanges();
+								if (GUILayout.Button("RefreshInformation()"))
+										refreshInformation();
+								if (GUILayout.Button("CreateStyles()"))
+										CreateStyles();
+								if (GUILayout.Button("push()"))
+										push();
+								if (GUILayout.Button("resetBusiness()"))
+										business.Clear();
+								GUILayout.EndVertical();
+								
 						}
-            GUILayout.EndVertical();
-        }
+
+						if (busnessDisplay = EditorGUILayout.Foldout(busnessDisplay, "Debug Business Array"))
+						{
+								GUILayout.BeginVertical("box");
+								foreach(StringPointer strp in business) {
+									GUILayout.Label(strp.ToString());
+								}
+								GUILayout.EndVertical();
+						}
+					}
+				}
+
+				
 
 
-        if (creatingBranch = EditorGUILayout.Foldout(creatingBranch, "Create New Branch"))
-        {
-            EditorGUI.indentLevel = 2;
-            newBranchName = EditorGUILayout.TextField("Branch Name", newBranchName);
-            GUILayout.Button("Create New Branch");
-            EditorGUI.indentLevel = 0;
-        }
 
 
 

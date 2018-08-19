@@ -7,9 +7,7 @@ public class FamilyController : MonoBehaviour {
 
 	[SerializeField]
 	private LayerMask simLayer;
-	
-	[SerializeField]
-	private Camera camera;
+
 	
 	[SerializeField]
 	private Transform selectedSimObject;
@@ -21,7 +19,7 @@ public class FamilyController : MonoBehaviour {
 			if (EventSystem.current.IsPointerOverGameObject()) return;
 
 			RaycastHit hit;
-			Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 			if (Physics.Raycast(ray, out hit, Mathf.Infinity, simLayer)) {
 				GameObject obj = hit.collider.gameObject;
