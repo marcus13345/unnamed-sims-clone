@@ -225,6 +225,7 @@ class GitPanel : EditorWindow
                 commit.subject = parts[3];
                 history[i] = commit;
             }
+						//test
 						UnityEngine.Debug.Log(syncedCommits.Length);
             for (int i = 0; i < syncedCommits.Length; i++)
             {
@@ -384,20 +385,20 @@ class GitPanel : EditorWindow
             refreshHistory();
 
 
-            ExecuteResponse gitPull = executeWithCode("git", "pull origin " + currentBranch + "");
-            if (gitPull.exitCode != 0)
-            {
-                dialogue("git push returned exit code " + gitPull.exitCode, gitPull.message + "\n\nThis likely means there are conflicts between you and remote, since your last pull");
-                return;
-            }
+            // ExecuteResponse gitPull = executeWithCode("git", "pull origin " + currentBranch + "");
+            // if (gitPull.exitCode != 0)
+            // {
+            //     dialogue("git push returned exit code " + gitPull.exitCode, gitPull.message + "\n\nThis likely means there are conflicts between you and remote, since your last pull");
+            //     return;
+            // }
 
 
-            ExecuteResponse gitPush = executeWithCode("git", "push origin " + currentBranch + "");
-            if (gitPush.exitCode != 0)
-            {
-                dialogue("git push returned exit code " + gitPush.exitCode, gitPush.message + "\n\nThis could be cause by invalid credentials, try from the command line");
-                return;
-            }
+            // ExecuteResponse gitPush = executeWithCode("git", "push origin " + currentBranch + "");
+            // if (gitPush.exitCode != 0)
+            // {
+            //     dialogue("git push returned exit code " + gitPush.exitCode, gitPush.message + "\n\nThis could be cause by invalid credentials, try from the command line");
+            //     return;
+            // }
 
 
 
