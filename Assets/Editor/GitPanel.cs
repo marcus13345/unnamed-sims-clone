@@ -209,14 +209,10 @@ class GitPanel : EditorWindow
             string[] localCommits = execute("git", "log @{u}..HEAD -n " + commitCount + " --pretty=format:\"%h;%an;%ar;%s\"").Trim().Split('\n');
 
             history = new Commit[commitCount];
-						
-						UnityEngine.Debug.Log(String.Join("\n", syncedCommits));
-						UnityEngine.Debug.Log(String.Join("\n", localCommits));
 
             if (localCommits.Length == 1 && localCommits[0] == "")
                 localCommits = new string[] { };
 
-						UnityEngine.Debug.Log("HERE?");
             for (int i = 0; i < localCommits.Length; i++)
             {
                 Commit commit;
@@ -229,8 +225,6 @@ class GitPanel : EditorWindow
                 commit.subject = parts[3];
                 history[i] = commit;
             }
-						//test
-						UnityEngine.Debug.Log(syncedCommits.Length);
             for (int i = 0; i < syncedCommits.Length; i++)
             {
                 Commit commit;
@@ -243,7 +237,6 @@ class GitPanel : EditorWindow
                 commit.subject = parts[3];
                 history[i + localCommits.Length] = commit;
             }
-						UnityEngine.Debug.Log("HERE?");
             mainThreadInvokeQueue += new Invoke(() =>
             {
 							business.Remove(busyLock);
